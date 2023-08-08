@@ -6,7 +6,7 @@
         class="secondary"
         v-for="(item, index) in buttonList"
         :key="index"
-        @click="updateScreen()"
+        @click="updateScreen(item)"
       >
         {{ item }}
       </button>
@@ -40,7 +40,14 @@ const calcInnerData = reactive({
   rightVal: "33",
 });
 const screenValue = ref("");
-const updateScreen = () => {
+const updateScreen = (param) => {
+  if (param === "=") {
+    console.log("is equal");
+  } else if (!isNaN(parseInt(param))) {
+    console.log("number");
+  } else {
+    console.log("not number");
+  }
   calcInnerData.rightVal++;
 };
 watch(
@@ -48,12 +55,10 @@ watch(
   () => {
     screenValue.value = "";
     Object.values(calcInnerData).map((item) => {
-      console.log(item);
       screenValue.value += `${item} `;
     });
   },
-  { deep: true },
-  { immediate: true }
+  { deep: true }
 );
 </script>
 <style scoped>
