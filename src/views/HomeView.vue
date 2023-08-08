@@ -20,7 +20,9 @@
   </main>
 </template>
 <script setup>
+import { useToast } from "vue-toastification";
 import { reactive, ref, watch } from "vue";
+const toast = useToast();
 const ultimateResult = ref("");
 const buttonList = [
   "%",
@@ -48,12 +50,23 @@ const buttonList = [
   "",
   "=",
 ];
+const screenValue = ref("");
 const calcInnerData = reactive({
   leftVal: "",
   operator: "",
   rightVal: "",
 });
-const screenValue = ref("");
+watch(
+  calcInnerData,
+  () => {
+    screenValue.value = "";
+    Object.values(calcInnerData).map((item) => {
+      screenValue.value += `${item} `;
+    });
+  },
+  { deep: true }
+);
+// ------------- OPERATORS ------------------
 const plus = (left, right) => {
   return parseInt(left) + parseInt(right);
 };
@@ -72,12 +85,17 @@ const powerTwo = (left) => {
 const square = (left) => {
   return Math.sqrt(left);
 };
+const modulus = (left, right) => {
+  return parseInt(left) % parseInt(right);
+};
+//----------------- Reseting all data ------------------
 const dataReset = () => {
   (calcInnerData.leftVal = ""),
     (calcInnerData.rightVal = ""),
     (calcInnerData.operator = ""),
     (ultimateResult.value = "");
 };
+//--------------- defining what is the pressed button -----------------
 const updateScreen = (param) => {
   if (ultimateResult.value) {
     dataReset();
@@ -110,14 +128,20 @@ const updateScreen = (param) => {
             calcInnerData.rightVal
           );
           break;
+        case "%":
+          ultimateResult.value = modulus(
+            calcInnerData.leftVal,
+            calcInnerData.rightVal
+          );
+          break;
         default:
           ultimateResult.value = "";
           break;
       }
-      // resetCalc();
-      // addNumber(result + "");
     } else {
-      alert("Error");
+      toast.error("An error occured!", {
+        timeout: 2000,
+      });
     }
   } else if (!isNaN(parseInt(param))) {
     //if the param is a number
@@ -137,6 +161,7 @@ const updateScreen = (param) => {
       }
     }
   } else {
+    // if the pressed button is an operator but not '+ - / *'
     switch (param) {
       case "Del":
         if (calcInnerData.rightVal.length) {
@@ -162,13 +187,17 @@ const updateScreen = (param) => {
       case "⅟":
         if (calcInnerData.rightVal.length) {
           dataReset();
-          alert("error");
+          toast.error("An error occured!", {
+            timeout: 2000,
+          });
         } else if (calcInnerData.operator.length) {
           dataReset();
-          alert("error");
+          toast.error("An error occured!", {
+            timeout: 2000,
+          });
         } else if (
           calcInnerData.leftVal.length &&
-          calcInnerData.leftVal !== 0
+          calcInnerData.leftVal !== "0"
         ) {
           ultimateResult.value = divide("1", calcInnerData.leftVal);
         }
@@ -176,10 +205,14 @@ const updateScreen = (param) => {
       case "x^2":
         if (calcInnerData.rightVal.length) {
           dataReset();
-          alert("error");
+          toast.error("An error occured!", {
+            timeout: 2000,
+          });
         } else if (calcInnerData.operator.length) {
           dataReset();
-          alert("error");
+          toast.error("An error occured!", {
+            timeout: 2000,
+          });
         } else if (
           calcInnerData.leftVal.length &&
           calcInnerData.leftVal !== 0
@@ -190,10 +223,14 @@ const updateScreen = (param) => {
       case "√":
         if (calcInnerData.rightVal.length) {
           dataReset();
-          alert("error");
+          toast.error("An error occured!", {
+            timeout: 2000,
+          });
         } else if (calcInnerData.operator.length) {
           dataReset();
-          alert("error");
+          toast.error("An error occured!", {
+            timeout: 2000,
+          });
         } else if (
           calcInnerData.leftVal.length &&
           calcInnerData.leftVal !== 0
@@ -209,16 +246,6 @@ const updateScreen = (param) => {
     }
   }
 };
-watch(
-  calcInnerData,
-  () => {
-    screenValue.value = "";
-    Object.values(calcInnerData).map((item) => {
-      screenValue.value += `${item} `;
-    });
-  },
-  { deep: true }
-);
 </script>
 <style scoped>
 .main {
@@ -231,6 +258,6 @@ watch(
   @apply grid grid-rows-6 grid-cols-4 gap-2 p-6;
 }
 .secondary {
-  @apply bg-[#eae3db] text-black text-3xl font-bold rounded-[10px] hover:bg-[#bdbbb8];
+  @apply bg-[#eae3db] text-black text-2xl font-bold rounded-[10px] hover:bg-[#bdbbb8] py-1;
 }
 </style>
