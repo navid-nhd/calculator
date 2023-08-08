@@ -1,11 +1,12 @@
 <template>
   <main class="main">
-    <div class="result">12</div>
+    <div class="result">{{ screenValue }}</div>
     <div class="button-wrapper">
       <button
         class="secondary"
         v-for="(item, index) in buttonList"
         :key="index"
+        @click="updateScreen()"
       >
         {{ item }}
       </button>
@@ -13,6 +14,8 @@
   </main>
 </template>
 <script setup>
+import { reactive, ref, watch } from "vue";
+
 const buttonList = [
   "7",
   "8",
@@ -31,6 +34,27 @@ const buttonList = [
   ".",
   "=",
 ];
+const calcInnerData = reactive({
+  leftVal: "12",
+  operator: "+",
+  rightVal: "33",
+});
+const screenValue = ref("");
+const updateScreen = () => {
+  calcInnerData.rightVal++;
+};
+watch(
+  calcInnerData,
+  () => {
+    screenValue.value = "";
+    Object.values(calcInnerData).map((item) => {
+      console.log(item);
+      screenValue.value += `${item} `;
+    });
+  },
+  { deep: true },
+  { immediate: true }
+);
 </script>
 <style scoped>
 .main {
