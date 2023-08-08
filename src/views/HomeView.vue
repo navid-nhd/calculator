@@ -4,7 +4,7 @@
       <div>
         {{ screenValue }}
       </div>
-      <div>{{ ultimateResult }}</div>
+      <div class="text-3xl">{{ ultimateResult }}</div>
     </div>
 
     <div class="button-wrapper">
@@ -166,7 +166,10 @@ const updateScreen = (param) => {
         } else if (calcInnerData.operator.length) {
           dataReset();
           alert("error");
-        } else if (calcInnerData.leftVal.length) {
+        } else if (
+          calcInnerData.leftVal.length &&
+          calcInnerData.leftVal !== 0
+        ) {
           ultimateResult.value = divide("1", calcInnerData.leftVal);
         }
         break;
@@ -177,7 +180,10 @@ const updateScreen = (param) => {
         } else if (calcInnerData.operator.length) {
           dataReset();
           alert("error");
-        } else if (calcInnerData.leftVal.length) {
+        } else if (
+          calcInnerData.leftVal.length &&
+          calcInnerData.leftVal !== 0
+        ) {
           ultimateResult.value = powerTwo(calcInnerData.leftVal);
         }
         break;
@@ -188,7 +194,10 @@ const updateScreen = (param) => {
         } else if (calcInnerData.operator.length) {
           dataReset();
           alert("error");
-        } else if (calcInnerData.leftVal.length) {
+        } else if (
+          calcInnerData.leftVal.length &&
+          calcInnerData.leftVal !== 0
+        ) {
           ultimateResult.value = square(calcInnerData.leftVal);
         }
         break;
@@ -213,40 +222,15 @@ watch(
 </script>
 <style scoped>
 .main {
-  width: 400px;
-  background-color: rgb(37 45 68);
-  border-radius: 20px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  @apply w-[400px] rounded-2xl absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#252d44];
 }
 .result {
-  height: 100px;
-  background-color: rgb(24 31 50);
-  color: white;
-  font-size: 2rem;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  padding-left: 30px;
+  @apply h-28 text-white text-2xl bg-[#181f32] rounded-[20px] flex flex-col items-start pl-8 pt-2 m-3;
 }
 .button-wrapper {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(6, 50px);
-  gap: 9px;
-  padding: 30px;
+  @apply grid grid-rows-6 grid-cols-4 gap-2 p-6;
 }
 .secondary {
-  background-color: rgb(234 227 219);
-  color: black;
-  font-size: 1.9rem;
-  font-weight: bold;
-  border-radius: 10px;
-}
-.secondary:hover {
-  background-color: rgb(189, 187, 184);
+  @apply bg-[#eae3db] text-black text-3xl font-bold rounded-[10px] hover:bg-[#bdbbb8];
 }
 </style>
