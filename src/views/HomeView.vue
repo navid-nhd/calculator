@@ -1,6 +1,12 @@
 <template>
   <main class="main">
-    <div class="result">{{ screenValue }}</div>
+    <div class="result">
+      <div>
+        {{ screenValue }}
+      </div>
+      <div>{{ ultimateResult }}</div>
+    </div>
+
     <div class="button-wrapper">
       <button
         class="secondary"
@@ -15,8 +21,16 @@
 </template>
 <script setup>
 import { reactive, ref, watch } from "vue";
-
+const ultimateResult = ref("");
 const buttonList = [
+  "%",
+  "CE",
+  "C",
+  "Del",
+  "",
+  "",
+  "",
+  "/",
   "7",
   "8",
   "9",
@@ -29,7 +43,7 @@ const buttonList = [
   "2",
   "3",
   "+",
-  "+/-",
+  "",
   "0",
   ".",
   "=",
@@ -40,10 +54,57 @@ const calcInnerData = reactive({
   rightVal: "",
 });
 const screenValue = ref("");
+const plus = (left, right) => {
+  return parseInt(left) + parseInt(right);
+};
+const multiply = (left, right) => {
+  return parseInt(left) * parseInt(right);
+};
+const divide = (left, right) => {
+  return parseInt(left) / parseInt(right);
+};
+const minus = (left, right) => {
+  return parseInt(left) - parseInt(right);
+};
 const updateScreen = (param) => {
   console.log(calcInnerData.leftVal);
   if (param === "=") {
-    console.log("is equal");
+    if (calcInnerData.rightVal && calcInnerData.rightVal.slice(-1) !== "=") {
+      calcInnerData.rightVal += " =";
+      switch (calcInnerData.operator) {
+        case "+":
+          ultimateResult.value = plus(
+            calcInnerData.leftVal,
+            calcInnerData.rightVal
+          );
+          break;
+        case "*":
+          ultimateResult.value = multiply(
+            calcInnerData.leftVal,
+            calcInnerData.rightVal
+          );
+          break;
+        case "÷":
+          ultimateResult.value = divide(
+            calcInnerData.leftVal,
+            calcInnerData.rightVal
+          );
+          break;
+        case "-":
+          ultimateResult.value = minus(
+            calcInnerData.leftVal,
+            calcInnerData.rightVal
+          );
+          break;
+        default:
+          ultimateResult.value = "";
+          break;
+      }
+      // resetCalc();
+      // addNumber(result + "");
+    } else {
+      alert("Error");
+    }
   } else if (!isNaN(parseInt(param))) {
     //if the param is a number
     if (calcInnerData.operator.length) {
@@ -62,7 +123,9 @@ const updateScreen = (param) => {
       }
     }
   } else {
-    console.log("not number");
+    if (!calcInnerData.rightVal.length || calcInnerData.rightVal === "0") {
+      calcInnerData.operator = param;
+    }
   }
 };
 watch(
@@ -78,7 +141,7 @@ watch(
 </script>
 <style scoped>
 .main {
-  width: 700px;
+  width: 400px;
   background-color: rgb(37 45 68);
   border-radius: 20px;
   position: absolute;
@@ -93,20 +156,21 @@ watch(
   font-size: 2rem;
   border-radius: 20px;
   display: flex;
-  align-items: center;
-  padding-left: 40px;
+  flex-direction: column;
+  align-items: start;
+  padding-left: 30px;
 }
 .button-wrapper {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 120px 120px 120px 120px;
-  gap: 15px;
-  padding: 50px;
+  grid-template-rows: repeat(6, 50px);
+  gap: 9px;
+  padding: 30px;
 }
 .secondary {
   background-color: rgb(234 227 219);
   color: black;
-  font-size: 2.2rem;
+  font-size: 1.9rem;
   font-weight: bold;
   border-radius: 10px;
 }
