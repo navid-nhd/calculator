@@ -27,9 +27,9 @@ const buttonList = [
   "CE",
   "C",
   "Del",
-  "",
-  "",
-  "",
+  "⅟",
+  "x^2",
+  "√",
   "÷",
   "7",
   "8",
@@ -45,7 +45,7 @@ const buttonList = [
   "+",
   "",
   "0",
-  ".",
+  "",
   "=",
 ];
 const calcInnerData = reactive({
@@ -65,6 +65,12 @@ const divide = (left, right) => {
 };
 const minus = (left, right) => {
   return parseInt(left) - parseInt(right);
+};
+const powerTwo = (left) => {
+  return Math.pow(left, 2);
+};
+const square = (left) => {
+  return Math.sqrt(left);
 };
 const dataReset = () => {
   (calcInnerData.leftVal = ""),
@@ -153,15 +159,39 @@ const updateScreen = (param) => {
         dataReset();
         updateScreen("0");
         break;
-      // case "1/x":
-      //   if (calculator.left.length) {
-      //     const result = opDivide(1, calculator.left);
-      //     resetCalc();
-      //     if (result !== undefined) {
-      //       addNumber(result + "");
-      //     }
-      //   }
-      //   break;
+      case "⅟":
+        if (calcInnerData.rightVal.length) {
+          dataReset();
+          alert("error");
+        } else if (calcInnerData.operator.length) {
+          dataReset();
+          alert("error");
+        } else if (calcInnerData.leftVal.length) {
+          ultimateResult.value = divide("1", calcInnerData.leftVal);
+        }
+        break;
+      case "x^2":
+        if (calcInnerData.rightVal.length) {
+          dataReset();
+          alert("error");
+        } else if (calcInnerData.operator.length) {
+          dataReset();
+          alert("error");
+        } else if (calcInnerData.leftVal.length) {
+          ultimateResult.value = powerTwo(calcInnerData.leftVal);
+        }
+        break;
+      case "√":
+        if (calcInnerData.rightVal.length) {
+          dataReset();
+          alert("error");
+        } else if (calcInnerData.operator.length) {
+          dataReset();
+          alert("error");
+        } else if (calcInnerData.leftVal.length) {
+          ultimateResult.value = square(calcInnerData.leftVal);
+        }
+        break;
       default:
         if (!calcInnerData.rightVal.length || calcInnerData.rightVal === "0") {
           calcInnerData.operator = param;
