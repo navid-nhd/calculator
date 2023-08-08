@@ -34,26 +34,39 @@ const buttonList = [
 </script>
 <style scoped>
 .main {
-  width: 900px;
+  width: 700px;
   background-color: rgb(37 45 68);
+  border-radius: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .result {
   height: 100px;
   background-color: rgb(24 31 50);
   color: white;
   font-size: 2rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding-left: 40px;
 }
 .button-wrapper {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 100px 100px 100px 100px;
-  gap: 4px;
+  grid-template-rows: 120px 120px 120px 120px;
+  gap: 15px;
   padding: 50px;
 }
 .secondary {
   background-color: rgb(234 227 219);
   color: black;
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
+  border-radius: 10px;
+}
+.secondary:hover {
+  background-color: rgb(189, 187, 184);
 }
 </style>
