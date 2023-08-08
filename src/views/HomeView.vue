@@ -30,7 +30,7 @@ const buttonList = [
   "",
   "",
   "",
-  "/",
+  "÷",
   "7",
   "8",
   "9",
@@ -66,8 +66,16 @@ const divide = (left, right) => {
 const minus = (left, right) => {
   return parseInt(left) - parseInt(right);
 };
+const dataReset = () => {
+  (calcInnerData.leftVal = ""),
+    (calcInnerData.rightVal = ""),
+    (calcInnerData.operator = ""),
+    (ultimateResult.value = "");
+};
 const updateScreen = (param) => {
-  console.log(calcInnerData.leftVal);
+  if (ultimateResult.value) {
+    dataReset();
+  }
   if (param === "=") {
     if (calcInnerData.rightVal && calcInnerData.rightVal.slice(-1) !== "=") {
       calcInnerData.rightVal += " =";
@@ -123,8 +131,42 @@ const updateScreen = (param) => {
       }
     }
   } else {
-    if (!calcInnerData.rightVal.length || calcInnerData.rightVal === "0") {
-      calcInnerData.operator = param;
+    switch (param) {
+      case "Del":
+        if (calcInnerData.rightVal.length) {
+          if (calcInnerData.rightVal === "") {
+            calcInnerData.rightVal = "0";
+          }
+          calcInnerData.rightVal = calcInnerData.rightVal.slice(0, -1);
+        } else if (calcInnerData.operator.length) {
+          calcInnerData.operator = "";
+        } else {
+          if (calcInnerData.leftVal === "") {
+            calcInnerData.leftVal = "0";
+          } else {
+            calcInnerData.leftVal = calcInnerData.leftVal.slice(0, -1);
+          }
+        }
+        break;
+      case "C":
+      case "CE":
+        dataReset();
+        updateScreen("0");
+        break;
+      // case "1/x":
+      //   if (calculator.left.length) {
+      //     const result = opDivide(1, calculator.left);
+      //     resetCalc();
+      //     if (result !== undefined) {
+      //       addNumber(result + "");
+      //     }
+      //   }
+      //   break;
+      default:
+        if (!calcInnerData.rightVal.length || calcInnerData.rightVal === "0") {
+          calcInnerData.operator = param;
+        }
+        break;
     }
   }
 };
