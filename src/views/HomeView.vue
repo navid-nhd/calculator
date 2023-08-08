@@ -35,20 +35,35 @@ const buttonList = [
   "=",
 ];
 const calcInnerData = reactive({
-  leftVal: "12",
-  operator: "+",
-  rightVal: "33",
+  leftVal: "",
+  operator: "",
+  rightVal: "",
 });
 const screenValue = ref("");
 const updateScreen = (param) => {
+  console.log(calcInnerData.leftVal);
   if (param === "=") {
     console.log("is equal");
   } else if (!isNaN(parseInt(param))) {
-    console.log("number");
+    //if the param is a number
+    if (calcInnerData.operator.length) {
+      //if the lefVal is fullfilled
+      if (calcInnerData.rightVal === "0") {
+        calcInnerData.rightVal = param;
+      } else {
+        calcInnerData.rightVal += param;
+      }
+    } else {
+      //if the left val is empty
+      if (calcInnerData.leftVal === "0") {
+        calcInnerData.leftVal = param;
+      } else {
+        calcInnerData.leftVal += param;
+      }
+    }
   } else {
     console.log("not number");
   }
-  calcInnerData.rightVal++;
 };
 watch(
   calcInnerData,
